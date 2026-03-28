@@ -1,0 +1,13 @@
+pre-commit:
+  commands:
+    lint:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: bunx oxlint --fix {staged_files} && git add {staged_files}
+    fmt:
+      glob: "*.{ts,tsx,js,jsx,json,css}"
+      run: bunx oxfmt --write {staged_files} && git add {staged_files}
+
+pre-push:
+  commands:
+    build:
+      run: bun run build
