@@ -18,8 +18,16 @@ export function NoteCard({ note, onDelete }: NoteCardProps) {
         gap: 8,
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <h3 style={{ margin: 0, fontSize: 18, color: "#f1f5f9" }}>{note.title}</h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        <h3 style={{ margin: 0, fontSize: 18, color: "#f1f5f9" }}>
+          {note.title}
+        </h3>
         <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
           <Link
             to="/notes/$noteId/edit"
@@ -52,13 +60,23 @@ export function NoteCard({ note, onDelete }: NoteCardProps) {
         </div>
       </div>
       {note.content && (
-        <p style={{ margin: 0, fontSize: 14, color: "#94a3b8", whiteSpace: "pre-wrap" }}>
-          {note.content.length > 200 ? note.content.slice(0, 200) + "..." : note.content}
+        <p
+          style={{
+            margin: 0,
+            fontSize: 14,
+            color: "#94a3b8",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {note.content.length > 200
+            ? note.content.slice(0, 200) + "..."
+            : note.content}
         </p>
       )}
       <span style={{ fontSize: 12, color: "#64748b" }}>
         {new Date(note.updatedAt).toLocaleString()}
       </span>
+      <span>{note.id}</span>
     </div>
   );
 }

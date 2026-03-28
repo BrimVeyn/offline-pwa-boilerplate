@@ -33,7 +33,7 @@ export const notesRoutes = new Elysia({ prefix: "/notes" })
     return db.select().from(notes).orderBy(desc(notes.updatedAt));
   })
   .post(
-    "/batch",
+    "/sync",
     async ({ body, headers }) => {
       const idempotencyKey = headers["idempotency-key"];
 

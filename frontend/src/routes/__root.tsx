@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { TanStackDevtools } from "@tanstack/react-devtools";
@@ -12,8 +12,10 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    offlineExecutor.waitForInit();
+    offlineExecutor.waitForInit().then(() => setReady(true));
   }, []);
 
   return (
@@ -27,7 +29,7 @@ function RootComponent() {
           fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
-        <Outlet />
+        {ready ? <Outlet /> : null}
       </div>
       <OfflineIndicator />
       <TanStackDevtools

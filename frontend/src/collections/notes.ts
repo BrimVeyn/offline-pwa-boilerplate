@@ -42,8 +42,10 @@ export const notesCollection = createCollection(
       }));
     },
     onInsert: async ({ transaction }) => {
-      const { modified: newNote } = transaction.mutations[0];
-      await api.notes.post(newNote);
+      for (const mutation of transaction.mutations) {
+        const { modified: newNote } = mutation;
+        await api.notes.post(newNote);
+      }
     },
     onUpdate: async ({ transaction }) => {
       for (const mutation of transaction.mutations) {
@@ -82,7 +84,7 @@ export const offlineExecutor = startOfflineExecutor({
         };
       });
 
-      await api.notes.batch.post(
+      await api.notes.sync.post(
         { mutations },
         { headers: { "idempotency-key": idempotencyKey } },
       );
@@ -97,15 +99,18 @@ export const offlineExecutor = startOfflineExecutor({
   },
 });
 
-// --- Offline mutation helpers ---
-// Each creates a transaction, mutates the collection inside it, and commits.
-// The executor persists to IDB before network — nothing is lost.
-
-export function addNote(note: { id: string; title: string; content: string }) {
+function executeMutation(mutate: () => void) {
   const tx = offlineExecutor.createOfflineTransaction({
     mutationFnName: "syncNotes",
   });
-  tx.mutate(() => {
+  tx.mutate(mutate);
+  tx.commit();
+}
+
+// --- Public helpers ---
+
+export function addNote(note: { id: string; title: string; content: string }) {
+  executeMutation(() => {
     notesCollection.insert({
       id: note.id,
       title: note.title,
@@ -121,10 +126,7 @@ export function updateNote(vars: {
   title: string;
   content: string;
 }) {
-  const tx = offlineExecutor.createOfflineTransaction({
-    mutationFnName: "syncNotes",
-  });
-  tx.mutate(() => {
+  executeMutation(() => {
     notesCollection.update(vars.id, (draft) => {
       draft.title = vars.title;
       draft.content = vars.content;
@@ -134,10 +136,7 @@ export function updateNote(vars: {
 }
 
 export function deleteNote(vars: { id: string }) {
-  const tx = offlineExecutor.createOfflineTransaction({
-    mutationFnName: "syncNotes",
-  });
-  tx.mutate(() => {
+  executeMutation(() => {
     notesCollection.delete(vars.id);
   });
 }
