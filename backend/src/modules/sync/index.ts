@@ -1,25 +1,28 @@
-import { Elysia } from "elysia";
-import { syncBodySchema } from "@notes-pwa/shared";
-import { SyncService } from "./service";
-import { NoteEntity } from "./entities/notes";
-import { WriterEntity } from "./entities/writers";
+import { syncBodySchema } from '@notes-pwa/shared'
+import { Elysia } from 'elysia'
+import { evlog } from 'evlog/elysia'
+
+import { NoteEntity } from '../entities/notes/service'
+import { WriterEntity } from '../entities/writers/service'
+import { SyncService } from './service'
 
 export const syncRoutes = new Elysia()
-  .get("/notes", () => NoteEntity.list())
-  .get("/writers", () => WriterEntity.list())
+  .use(evlog())
+  .get('/notes', () => NoteEntity.list())
+  .get('/writers', () => WriterEntity.list())
   .post(
-    "/sync",
+    '/sync',
     async ({ body, headers, log }) => {
-      log.info(`Sync request: ${body.mutations.length} mutations`);
-      log.set({ mutations: body.mutations });
+      log.info(`Sync request: ${body.mutations.length} mutations`)
+      log.set(Object.fromEntries(body.mutations.map((m, i) => [`mutation-${i}`, m])))
 
-      await SyncService.sync(body.mutations);
+      await SyncService.sync(body.mutations)
 
       return {
         success: true,
         processed: body.mutations.length,
-        idempotencyKey: headers["idempotency-key"],
-      };
+        idempotencyKey: headers['idempotency-key'],
+      }
     },
-    { body: syncBodySchema },
-  );
+    { body: syncBodySchema }
+  )
