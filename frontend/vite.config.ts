@@ -1,56 +1,54 @@
-import path from "node:path";
-import { defineConfig } from "vite";
-import { devtools } from "@tanstack/devtools-vite";
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import { VitePWA } from "vite-plugin-pwa";
+import tailwindcss from '@tailwindcss/vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import basicSsl from '@vitejs/plugin-basic-ssl'
+import react from '@vitejs/plugin-react'
+import path from 'node:path'
+import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
     devtools(),
     tailwindcss(),
-    TanStackRouterVite(),
+    tanstackRouter(),
+    basicSsl(),
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: 'autoUpdate',
       manifest: {
-        name: "Offline Notes",
-        short_name: "Notes",
-        description: "Offline-first note taking app",
-        theme_color: "#0f172a",
-        background_color: "#0f172a",
-        display: "standalone",
-        start_url: "/",
+        name: 'Offline Notes',
+        short_name: 'Notes',
+        description: 'Offline-first note taking app',
+        theme_color: '#0f172a',
+        background_color: '#0f172a',
+        display: 'standalone',
+        start_url: '/',
         icons: [
-          { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
-          { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
+          { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
           {
-            src: "/pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },
-      // workbox: {
-      //   globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
-      // runtimeCaching: [
-      //   {
-      //     urlPattern: /^http:\/\/localhost:3000\/notes$/,
-      //     handler: "NetworkFirst",
-      //     options: {
-      //       cacheName: "api-notes-cache",
-      //       expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
-      //       networkTimeoutSeconds: 3,
-      //     },
-      //   },
-      // ],
-      // },
     }),
   ],
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
+    alias: { '@': path.resolve(import.meta.dirname, './src') },
   },
-  server: { port: 5173 },
-});
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+  },
+  preview: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+  },
+})
