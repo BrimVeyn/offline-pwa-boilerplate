@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "cache": true,
-      "dependsOn": ["^build", "^dev", "^db:generate"],
+      "dependsOn": ["^build", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env", ".env.*"],
       "outputs": ["dist/**", "out/**", "build/**"],
       "env": ["MODE", "DATABASE_URL"]
@@ -16,6 +16,11 @@
     },
     "check-types": {
       "cache": true
+    },
+    "preview": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
     },
     "db:generate": {
       "cache": false
