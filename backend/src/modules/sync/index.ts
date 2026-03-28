@@ -4,8 +4,7 @@ import { evlog } from 'evlog/elysia'
 
 import { NoteEntity } from '@/modules/entities/notes/service'
 import { WriterEntity } from '@/modules/entities/writers/service'
-
-import { SyncService } from './service'
+import { SyncService } from '@/modules/sync/service'
 
 export const syncRoutes = new Elysia()
   .use(evlog())

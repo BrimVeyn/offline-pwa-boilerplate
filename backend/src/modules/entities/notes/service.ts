@@ -2,8 +2,7 @@ import { eq, desc } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { notes } from '@/db/schema'
-
-import { NoteModel } from './model'
+import { NoteModel } from '@/modules/entities/notes/model'
 
 export abstract class NoteEntity {
   static async list() {

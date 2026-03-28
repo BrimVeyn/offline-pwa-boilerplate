@@ -2,7 +2,7 @@ import { cors } from '@elysiajs/cors'
 import { Elysia } from 'elysia'
 import { evlog } from 'evlog/elysia'
 
-import { syncRoutes } from './modules/sync'
+import { syncRoutes } from '@/modules/sync'
 
 const app = new Elysia({ prefix: '/api' })
   .use(evlog())

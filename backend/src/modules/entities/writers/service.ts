@@ -2,8 +2,7 @@ import { eq, asc } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { writers } from '@/db/schema'
-
-import { WriterModel } from './model'
+import { WriterModel } from '@/modules/entities/writers/model'
 
 export abstract class WriterEntity {
   static async list() {

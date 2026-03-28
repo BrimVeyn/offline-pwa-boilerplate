@@ -4,8 +4,7 @@ import { useLogger } from 'evlog/elysia'
 import { db } from '@/db'
 import { NoteEntity } from '@/modules/entities/notes/service'
 import { WriterEntity } from '@/modules/entities/writers/service'
-
-import type { SyncModel } from './model'
+import { SyncModel } from '@/modules/sync/model'
 
 export abstract class SyncService {
   static async sync(mutations: SyncMutation[]) {
