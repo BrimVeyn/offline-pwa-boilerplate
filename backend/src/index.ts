@@ -1,14 +1,16 @@
-import { Elysia } from "elysia";
-import { cors } from "@elysiajs/cors";
-import { evlog } from "evlog/elysia";
-import { syncRoutes } from "./modules/sync";
+import { cors } from '@elysiajs/cors'
+import { Elysia } from 'elysia'
+import { evlog } from 'evlog/elysia'
 
-const app = new Elysia()
+import { syncRoutes } from './modules/sync'
+
+const app = new Elysia({ prefix: '/api' })
   .use(evlog())
-  .use(cors({ origin: "http://localhost:5173" }))
+  .use(cors({ origin: true }))
   .use(syncRoutes)
-  .listen(3000);
+  .listen({ port: 3000, hostname: '0.0.0.0' })
 
-console.log(`Server running at http://${app.server?.hostname}:${app.server?.port}`);
+// oxlint-disable-next-line no-console
+console.log(`Server running at http://${app.server?.hostname}:${app.server?.port}`)
 
-export type App = typeof app;
+export type App = typeof app
