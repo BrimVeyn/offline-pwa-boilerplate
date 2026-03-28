@@ -3,8 +3,8 @@ import { useLogger } from 'evlog/elysia'
 
 import { db } from '@/db'
 
-import { NoteEntity } from './entities/notes/service'
-import { WriterEntity } from './entities/writers/service'
+import { NoteEntity } from '../entities/notes/service'
+import { WriterEntity } from '../entities/writers/service'
 import { SyncModel } from './model'
 
 export abstract class SyncService {

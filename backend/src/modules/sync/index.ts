@@ -2,8 +2,9 @@ import { syncBodySchema } from '@notes-pwa/shared'
 import { Elysia } from 'elysia'
 import { evlog } from 'evlog/elysia'
 
-import { NoteEntity } from '../entities/notes/service'
-import { WriterEntity } from '../entities/writers/service'
+import { NoteEntity } from '@/modules/entities/notes/service'
+import { WriterEntity } from '@/modules/entities/writers/service'
+
 import { SyncService } from './service'
 
 export const syncRoutes = new Elysia()
