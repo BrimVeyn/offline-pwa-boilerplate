@@ -4,5 +4,4 @@ dist
 *.tsbuildinfo
 .vite
 .env
-.env.*
 .turbo
