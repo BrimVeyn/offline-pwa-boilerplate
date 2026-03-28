@@ -1,5 +1,8 @@
-import { Link } from "@tanstack/react-router";
-import type { Note, Writer } from "@notes-pwa/shared";
+import type { Note, Writer } from '@notes-pwa/shared'
+
+import { Link } from '@tanstack/react-router'
+
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
   CardHeader,
@@ -7,15 +10,15 @@ import {
   CardAction,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { WriterSelect } from "./writer-select";
+} from '@/components/ui/card'
+
+import { WriterSelect } from './writer-select'
 
 interface NoteCardProps {
-  note: Note;
-  writers: Writer[];
-  onDelete: (id: string) => void;
-  onAssignWriter: (noteId: string, writerId: string | null) => void;
+  note: Note
+  writers: Writer[]
+  onDelete: (id: string) => void
+  onAssignWriter: (noteId: string, writerId: string | null) => void
 }
 
 export function NoteCard({ note, writers, onDelete, onAssignWriter }: NoteCardProps) {
@@ -27,7 +30,7 @@ export function NoteCard({ note, writers, onDelete, onAssignWriter }: NoteCardPr
           <Link
             to="/notes/$noteId/edit"
             params={{ noteId: note.id }}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
+            className={buttonVariants({ variant: 'outline', size: 'sm' })}
           >
             Edit
           </Link>
@@ -38,12 +41,12 @@ export function NoteCard({ note, writers, onDelete, onAssignWriter }: NoteCardPr
       </CardHeader>
       {note.content && (
         <CardContent>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-            {note.content.length > 200 ? note.content.slice(0, 200) + "..." : note.content}
+          <p className="text-muted-foreground text-sm whitespace-pre-wrap">
+            {note.content.length > 200 ? `${note.content.slice(0, 200)}...` : note.content}
           </p>
         </CardContent>
       )}
-      <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
+      <CardFooter className="text-muted-foreground flex items-center justify-between text-xs">
         <WriterSelect
           writers={writers}
           value={note.writerId}
@@ -52,5 +55,5 @@ export function NoteCard({ note, writers, onDelete, onAssignWriter }: NoteCardPr
         <span>{new Date(note.updatedAt).toLocaleString()}</span>
       </CardFooter>
     </Card>
-  );
+  )
 }

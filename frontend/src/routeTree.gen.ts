@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OnlineOnlyRouteImport } from './routes/_online-only'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotesNewRouteImport } from './routes/notes/new'
+import { Route as OnlineOnlyAdminRouteImport } from './routes/_online-only/admin'
 import { Route as NotesNoteIdEditRouteImport } from './routes/notes/$noteId.edit'
 
+const OnlineOnlyRoute = OnlineOnlyRouteImport.update({
+  id: '/_online-only',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -23,6 +29,11 @@ const NotesNewRoute = NotesNewRouteImport.update({
   path: '/notes/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnlineOnlyAdminRoute = OnlineOnlyAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => OnlineOnlyRoute,
+} as any)
 const NotesNoteIdEditRoute = NotesNoteIdEditRouteImport.update({
   id: '/notes/$noteId/edit',
   path: '/notes/$noteId/edit',
@@ -31,36 +42,54 @@ const NotesNoteIdEditRoute = NotesNoteIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof OnlineOnlyAdminRoute
   '/notes/new': typeof NotesNewRoute
   '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof OnlineOnlyAdminRoute
   '/notes/new': typeof NotesNewRoute
   '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_online-only': typeof OnlineOnlyRouteWithChildren
+  '/_online-only/admin': typeof OnlineOnlyAdminRoute
   '/notes/new': typeof NotesNewRoute
   '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/notes/new' | '/notes/$noteId/edit'
+  fullPaths: '/' | '/admin' | '/notes/new' | '/notes/$noteId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/notes/new' | '/notes/$noteId/edit'
-  id: '__root__' | '/' | '/notes/new' | '/notes/$noteId/edit'
+  to: '/' | '/admin' | '/notes/new' | '/notes/$noteId/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/_online-only'
+    | '/_online-only/admin'
+    | '/notes/new'
+    | '/notes/$noteId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OnlineOnlyRoute: typeof OnlineOnlyRouteWithChildren
   NotesNewRoute: typeof NotesNewRoute
   NotesNoteIdEditRoute: typeof NotesNoteIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_online-only': {
+      id: '/_online-only'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof OnlineOnlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -75,6 +104,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_online-only/admin': {
+      id: '/_online-only/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof OnlineOnlyAdminRouteImport
+      parentRoute: typeof OnlineOnlyRoute
+    }
     '/notes/$noteId/edit': {
       id: '/notes/$noteId/edit'
       path: '/notes/$noteId/edit'
@@ -85,8 +121,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OnlineOnlyRouteChildren {
+  OnlineOnlyAdminRoute: typeof OnlineOnlyAdminRoute
+}
+
+const OnlineOnlyRouteChildren: OnlineOnlyRouteChildren = {
+  OnlineOnlyAdminRoute: OnlineOnlyAdminRoute,
+}
+
+const OnlineOnlyRouteWithChildren = OnlineOnlyRoute._addFileChildren(
+  OnlineOnlyRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OnlineOnlyRoute: OnlineOnlyRouteWithChildren,
   NotesNewRoute: NotesNewRoute,
   NotesNoteIdEditRoute: NotesNoteIdEditRoute,
 }

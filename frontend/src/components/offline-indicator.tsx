@@ -1,23 +1,10 @@
-import { useSyncExternalStore } from "react";
-import { Badge } from "@/components/ui/badge";
-
-function subscribe(callback: () => void) {
-  window.addEventListener("online", callback);
-  window.addEventListener("offline", callback);
-  return () => {
-    window.removeEventListener("online", callback);
-    window.removeEventListener("offline", callback);
-  };
-}
-
-function getSnapshot() {
-  return navigator.onLine;
-}
+import { Badge } from '@/components/ui/badge'
+import { useIsOnline } from '@/hooks/use-is-online'
 
 export function OfflineIndicator() {
-  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
+  const isOnline = useIsOnline()
 
-  if (isOnline) return null;
+  if (isOnline) return null
 
   return (
     <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
@@ -25,5 +12,5 @@ export function OfflineIndicator() {
         You are offline — changes will sync when reconnected
       </Badge>
     </div>
-  );
+  )
 }
