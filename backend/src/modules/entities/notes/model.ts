@@ -1,7 +1,7 @@
 import { noteDeleteDataSchema, noteInsertDataSchema, noteUpdateDataSchema } from '@notes-pwa/shared'
 import z4 from 'zod/v4'
 
-import { SyncModel } from '@/modules/sync/model'
+import type { SyncModel } from '@/modules/sync/model'
 
 export namespace NoteModel {
   export type Tx = SyncModel.Tx

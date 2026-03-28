@@ -1,3 +1,4 @@
+import { syncMutationSchema, type SyncMutationKind } from '@notes-pwa/shared'
 import { startOfflineExecutor, IndexedDBAdapter } from '@tanstack/offline-transactions'
 
 import { notesCollection } from '../modules/notes/collection'
@@ -14,36 +15,17 @@ export const offlineExecutor = startOfflineExecutor({
       if (!isStillPending) return
 
       const allMutations = pending.flatMap((tx) =>
-        tx.mutations.map((m) => {
-          const entity = m.collection.id
-          const data = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
+        tx.mutations.flatMap((m) => {
+          const kind = `${m.collection.id}:${m.type}` as SyncMutationKind
+          const raw = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
 
-          if (entity === 'notes') {
-            return {
-              entity: 'notes' as const,
-              type: m.type as 'insert' | 'update' | 'delete',
-              data: {
-                id: data.id as string,
-                title: data.title as string | undefined,
-                content: data.content as string | undefined,
-                writerId: data.writerId as string | null | undefined,
-                createdAt: (data.createdAt as Date)?.toISOString(),
-                updatedAt: (data.updatedAt as Date)?.toISOString(),
-              },
-            }
+          const { data, error } = syncMutationSchema.safeParse({ kind, data: raw })
+          if (error) {
+            // oxlint-disable-next-line no-console
+            console.warn(`Invalid mutation ${kind}:`, error.message)
+            return []
           }
-
-          return {
-            entity: 'writers' as const,
-            type: m.type as 'insert' | 'update' | 'delete',
-            data: {
-              id: data.id as string,
-              firstName: data.firstName as string | undefined,
-              lastName: data.lastName as string | undefined,
-              createdAt: (data.createdAt as Date)?.toISOString(),
-              updatedAt: (data.updatedAt as Date)?.toISOString(),
-            },
-          }
+          return [data]
         })
       )
 
@@ -62,7 +44,7 @@ export const offlineExecutor = startOfflineExecutor({
   },
   onLeadershipChange: (isLeader) => {
     if (!isLeader) {
-      // online-only mode: another tab is the leader
+      //TODO: sync external store -> block site access
     }
   },
 })

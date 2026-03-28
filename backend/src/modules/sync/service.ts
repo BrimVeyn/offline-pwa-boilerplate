@@ -2,10 +2,10 @@ import { tryCatch, type SyncMutation } from '@notes-pwa/shared'
 import { useLogger } from 'evlog/elysia'
 
 import { db } from '@/db'
+import { NoteEntity } from '@/modules/entities/notes/service'
+import { WriterEntity } from '@/modules/entities/writers/service'
 
-import { NoteEntity } from '../entities/notes/service'
-import { WriterEntity } from '../entities/writers/service'
-import { SyncModel } from './model'
+import type { SyncModel } from './model'
 
 export abstract class SyncService {
   static async sync(mutations: SyncMutation[]) {
@@ -13,7 +13,7 @@ export abstract class SyncService {
 
     await db.transaction(async (tx) => {
       for (const mutation of mutations) {
-        log.info(`Processing: ${mutation.entity}.${mutation.type} id=${mutation.data.id}`)
+        log.info(`Processing: ${mutation.kind} id=${mutation.data.id}`)
 
         const [, error] = await tryCatch(() => this.execute(tx, mutation))
 
@@ -22,31 +22,25 @@ export abstract class SyncService {
           throw error
         }
 
-        log.info(`Success: ${mutation.entity}.${mutation.type} id=${mutation.data.id}`)
+        log.info(`Success: ${mutation.kind} id=${mutation.data.id}`)
       }
     })
   }
 
   private static execute(tx: SyncModel.Tx, m: SyncMutation) {
-    switch (m.entity) {
-      case 'notes':
-        switch (m.type) {
-          case 'insert':
-            return NoteEntity.insert(tx, m.data)
-          case 'update':
-            return NoteEntity.update(tx, m.data)
-          case 'delete':
-            return NoteEntity.delete(tx, m.data)
-        }
-      case 'writers':
-        switch (m.type) {
-          case 'insert':
-            return WriterEntity.insert(tx, m.data)
-          case 'update':
-            return WriterEntity.update(tx, m.data)
-          case 'delete':
-            return WriterEntity.delete(tx, m.data)
-        }
+    switch (m.kind) {
+      case 'notes:insert':
+        return NoteEntity.insert(tx, m.data)
+      case 'notes:update':
+        return NoteEntity.update(tx, m.data)
+      case 'notes:delete':
+        return NoteEntity.delete(tx, m.data)
+      case 'writers:insert':
+        return WriterEntity.insert(tx, m.data)
+      case 'writers:update':
+        return WriterEntity.update(tx, m.data)
+      case 'writers:delete':
+        return WriterEntity.delete(tx, m.data)
     }
   }
 }

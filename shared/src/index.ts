@@ -10,5 +10,6 @@ export {
   writerUpdateDataSchema,
   writerDeleteDataSchema,
   type SyncMutation,
+  type SyncMutationKind,
 } from './schemas/sync'
 export { tryCatch } from './try-catch'

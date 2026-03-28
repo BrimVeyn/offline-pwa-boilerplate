@@ -44,50 +44,19 @@ export const writerDeleteDataSchema = z4.object({
   id: z4.string(),
 })
 
-// --- Nested discriminated unions: entity > type ---
+// --- Flat discriminated union on `kind` (entity:operation) ---
 
-const noteMutationSchema = z4.discriminatedUnion('type', [
-  z4.object({
-    entity: z4.literal('notes'),
-    type: z4.literal('insert'),
-    data: noteInsertDataSchema,
-  }),
-  z4.object({
-    entity: z4.literal('notes'),
-    type: z4.literal('update'),
-    data: noteUpdateDataSchema,
-  }),
-  z4.object({
-    entity: z4.literal('notes'),
-    type: z4.literal('delete'),
-    data: noteDeleteDataSchema,
-  }),
-])
-
-const writerMutationSchema = z4.discriminatedUnion('type', [
-  z4.object({
-    entity: z4.literal('writers'),
-    type: z4.literal('insert'),
-    data: writerInsertDataSchema,
-  }),
-  z4.object({
-    entity: z4.literal('writers'),
-    type: z4.literal('update'),
-    data: writerUpdateDataSchema,
-  }),
-  z4.object({
-    entity: z4.literal('writers'),
-    type: z4.literal('delete'),
-    data: writerDeleteDataSchema,
-  }),
-])
-
-export const syncMutationSchema = z4.discriminatedUnion('entity', [
-  ...noteMutationSchema.options,
-  ...writerMutationSchema.options,
+export const syncMutationSchema = z4.discriminatedUnion('kind', [
+  z4.object({ kind: z4.literal('notes:insert'), data: noteInsertDataSchema }),
+  z4.object({ kind: z4.literal('notes:update'), data: noteUpdateDataSchema }),
+  z4.object({ kind: z4.literal('notes:delete'), data: noteDeleteDataSchema }),
+  z4.object({ kind: z4.literal('writers:insert'), data: writerInsertDataSchema }),
+  z4.object({ kind: z4.literal('writers:update'), data: writerUpdateDataSchema }),
+  z4.object({ kind: z4.literal('writers:delete'), data: writerDeleteDataSchema }),
 ])
 
 export type SyncMutation = z4.infer<typeof syncMutationSchema>
+export type SyncMutationKind = SyncMutation['kind']
 
 export const syncBodySchema = z4.object({
   mutations: z4.array(syncMutationSchema),
