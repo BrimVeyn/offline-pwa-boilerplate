@@ -1,0 +1,15 @@
+{
+  "name": "notes-pwa",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.8.20"
+  },
+  "packageManager": "bun@1.2.23"
+}

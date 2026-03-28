@@ -1,0 +1,48 @@
+import { useEffect } from "react";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { queryClient, offlineExecutor } from "../collections/notes";
+import { OfflineIndicator } from "../components/offline-indicator";
+
+export const Route = createRootRoute({
+  component: RootComponent,
+});
+
+function RootComponent() {
+  useEffect(() => {
+    offlineExecutor.waitForInit();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div
+        style={{
+          maxWidth: 640,
+          margin: "0 auto",
+          padding: "24px 16px",
+          minHeight: "100vh",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+        }}
+      >
+        <Outlet />
+      </div>
+      <OfflineIndicator />
+      <TanStackDevtools
+        plugins={[
+          {
+            name: "TanStack Query",
+            render: <ReactQueryDevtoolsPanel />,
+            defaultOpen: true,
+          },
+          {
+            name: "TanStack Router",
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+        ]}
+      />
+    </QueryClientProvider>
+  );
+}
