@@ -54,12 +54,8 @@
           "name": "notes_writer_id_writers_id_fk",
           "tableFrom": "notes",
           "tableTo": "writers",
-          "columnsFrom": [
-            "writer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["writer_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
