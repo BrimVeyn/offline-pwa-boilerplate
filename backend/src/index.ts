@@ -9,8 +9,6 @@ const app = new Elysia()
   .use(notesRoutes)
   .listen(3000);
 
-console.log(
-  `Server running at http://${app.server?.hostname}:${app.server?.port}`,
-);
+console.log(`Server running at http://${app.server?.hostname}:${app.server?.port}`);
 
 export type App = typeof app;

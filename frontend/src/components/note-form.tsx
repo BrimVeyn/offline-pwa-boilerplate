@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface NoteFormProps {
   initialTitle?: string;
@@ -7,7 +10,12 @@ interface NoteFormProps {
   submitLabel: string;
 }
 
-export function NoteForm({ initialTitle = "", initialContent = "", onSubmit, submitLabel }: NoteFormProps) {
+export function NoteForm({
+  initialTitle = "",
+  initialContent = "",
+  onSubmit,
+  submitLabel,
+}: NoteFormProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
@@ -18,53 +26,23 @@ export function NoteForm({ initialTitle = "", initialContent = "", onSubmit, sub
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <input
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <Input
         type="text"
         placeholder="Note title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        style={{
-          padding: "10px 14px",
-          fontSize: 16,
-          borderRadius: 8,
-          border: "1px solid #334155",
-          background: "#1e293b",
-          color: "#f1f5f9",
-        }}
       />
-      <textarea
+      <Textarea
         placeholder="Write your note..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
         rows={8}
-        style={{
-          padding: "10px 14px",
-          fontSize: 14,
-          borderRadius: 8,
-          border: "1px solid #334155",
-          background: "#1e293b",
-          color: "#f1f5f9",
-          resize: "vertical",
-        }}
       />
-      <button
-        type="submit"
-        style={{
-          padding: "10px 20px",
-          fontSize: 15,
-          fontWeight: 600,
-          borderRadius: 8,
-          border: "none",
-          background: "#3b82f6",
-          color: "white",
-          cursor: "pointer",
-          alignSelf: "flex-start",
-        }}
-      >
+      <Button type="submit" className="self-start">
         {submitLabel}
-      </button>
+      </Button>
     </form>
   );
 }

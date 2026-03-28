@@ -3,53 +3,33 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { notesCollection } from "../modules/notes/collection";
 import { deleteNote } from "../modules/notes/mutations";
 import { NoteCard } from "../components/note-card";
+import { buttonVariants } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-// eslint-disable-next-line react-refresh/only-export-components
 function HomePage() {
   const { data: notes } = useLiveQuery((q) =>
-    q
-      .from({ note: notesCollection })
-      .orderBy(({ note }) => note.updatedAt, "desc"),
+    q.from({ note: notesCollection }).orderBy(({ note }) => note.updatedAt, "desc"),
   );
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 24,
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: 28, color: "#f1f5f9" }}>Notes</h1>
-        <Link
-          to="/notes/new"
-          style={{
-            padding: "8px 18px",
-            fontSize: 15,
-            fontWeight: 600,
-            borderRadius: 8,
-            background: "#3b82f6",
-            color: "white",
-            textDecoration: "none",
-          }}
-        >
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Notes</h1>
+        <Link to="/notes/new" className={buttonVariants()}>
           + New Note
         </Link>
       </div>
 
       {notes.length === 0 && (
-        <p style={{ color: "#64748b", textAlign: "center", marginTop: 48 }}>
+        <p className="text-muted-foreground text-center mt-12">
           No notes yet. Create your first one!
         </p>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div className="flex flex-col gap-3">
         {notes.map((note) => (
           <NoteCard key={note.id} note={note} onDelete={(id) => deleteNote({ id })} />
         ))}

@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import type { Note } from "@notes-pwa/shared";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 interface NoteCardProps {
   note: Note;
@@ -8,75 +17,32 @@ interface NoteCardProps {
 
 export function NoteCard({ note, onDelete }: NoteCardProps) {
   return (
-    <div
-      style={{
-        background: "#1e293b",
-        borderRadius: 10,
-        padding: 16,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-        }}
-      >
-        <h3 style={{ margin: 0, fontSize: 18, color: "#f1f5f9" }}>
-          {note.title}
-        </h3>
-        <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+    <Card>
+      <CardHeader>
+        <CardTitle>{note.title}</CardTitle>
+        <CardAction className="flex gap-2">
           <Link
             to="/notes/$noteId/edit"
             params={{ noteId: note.id }}
-            style={{
-              padding: "4px 12px",
-              fontSize: 13,
-              borderRadius: 6,
-              background: "#334155",
-              color: "#94a3b8",
-              textDecoration: "none",
-            }}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
           >
             Edit
           </Link>
-          <button
-            onClick={() => onDelete(note.id)}
-            style={{
-              padding: "4px 12px",
-              fontSize: 13,
-              borderRadius: 6,
-              background: "#7f1d1d",
-              color: "#fca5a5",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
+          <Button variant="destructive" size="sm" onClick={() => onDelete(note.id)}>
             Delete
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardAction>
+      </CardHeader>
       {note.content && (
-        <p
-          style={{
-            margin: 0,
-            fontSize: 14,
-            color: "#94a3b8",
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {note.content.length > 200
-            ? note.content.slice(0, 200) + "..."
-            : note.content}
-        </p>
+        <CardContent>
+          <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+            {note.content.length > 200 ? note.content.slice(0, 200) + "..." : note.content}
+          </p>
+        </CardContent>
       )}
-      <span style={{ fontSize: 12, color: "#64748b" }}>
+      <CardFooter className="text-xs text-muted-foreground">
         {new Date(note.updatedAt).toLocaleString()}
-      </span>
-      <span>{note.id}</span>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

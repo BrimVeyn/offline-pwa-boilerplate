@@ -1,6 +1,1 @@
-export {
-  noteSchema,
-  mutationSchema,
-  syncBodySchema,
-  type Note,
-} from "./schemas/note";
+export { noteSchema, mutationSchema, syncBodySchema, type Note } from "./schemas/note";

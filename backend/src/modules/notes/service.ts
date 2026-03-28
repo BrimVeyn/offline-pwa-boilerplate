@@ -22,6 +22,8 @@ export abstract class NotesService {
                 id: mutation.data.id,
                 title: mutation.data.title ?? "",
                 content: mutation.data.content ?? "",
+                createdAt: mutation.data.createdAt ? new Date(mutation.data.createdAt) : new Date(),
+                updatedAt: mutation.data.updatedAt ? new Date(mutation.data.updatedAt) : new Date(),
               })
               .onConflictDoNothing();
             break;
@@ -35,7 +37,7 @@ export abstract class NotesService {
                 ...(mutation.data.content !== undefined && {
                   content: mutation.data.content,
                 }),
-                updatedAt: new Date(),
+                updatedAt: mutation.data.updatedAt ? new Date(mutation.data.updatedAt) : new Date(),
               })
               .where(eq(notes.id, mutation.data.id));
             break;

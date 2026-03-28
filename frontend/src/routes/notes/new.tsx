@@ -11,9 +11,7 @@ function NewNotePage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, color: "#f1f5f9", marginBottom: 20 }}>
-        New Note
-      </h1>
+      <h1 className="text-2xl font-bold mb-5">New Note</h1>
       <NoteForm
         submitLabel="Create Note"
         onSubmit={(data) => {

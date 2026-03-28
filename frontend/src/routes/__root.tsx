@@ -21,17 +21,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        style={{
-          maxWidth: 640,
-          margin: "0 auto",
-          padding: "24px 16px",
-          minHeight: "100vh",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-        }}
-      >
-        {ready ? <Outlet /> : null}
-      </div>
+      <div className="mx-auto max-w-2xl min-h-screen px-4 py-6">{ready ? <Outlet /> : null}</div>
       <OfflineIndicator />
       <TanStackDevtools
         plugins={[

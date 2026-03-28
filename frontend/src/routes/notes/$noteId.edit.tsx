@@ -18,13 +18,11 @@ function EditNotePage() {
 
   const note = notes[0];
 
-  if (!note) return <p style={{ color: "#ef4444" }}>Note not found</p>;
+  if (!note) return <p className="text-destructive">Note not found</p>;
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, color: "#f1f5f9", marginBottom: 20 }}>
-        Edit Note
-      </h1>
+      <h1 className="text-2xl font-bold mb-5">Edit Note</h1>
       <NoteForm
         initialTitle={note.title}
         initialContent={note.content}

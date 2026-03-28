@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { Badge } from "@/components/ui/badge";
 
 function subscribe(callback: () => void) {
   window.addEventListener("online", callback);
@@ -19,23 +20,10 @@ export function OfflineIndicator() {
   if (isOnline) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 16,
-        left: "50%",
-        transform: "translateX(-50%)",
-        background: "#ef4444",
-        color: "white",
-        padding: "8px 20px",
-        borderRadius: 8,
-        fontWeight: 600,
-        fontSize: 14,
-        zIndex: 9999,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-      }}
-    >
-      You are offline — changes will sync when reconnected
+    <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
+      <Badge variant="destructive" className="px-4 py-2 text-sm font-semibold shadow-lg">
+        You are offline — changes will sync when reconnected
+      </Badge>
     </div>
   );
 }

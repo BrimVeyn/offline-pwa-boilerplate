@@ -7,9 +7,13 @@
     "frontend"
   ],
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "lint": "oxlint --fix",
+    "fmt": "oxfmt --write ."
   },
   "devDependencies": {
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
     "turbo": "^2.8.20"
   },
   "packageManager": "bun@1.2.23"

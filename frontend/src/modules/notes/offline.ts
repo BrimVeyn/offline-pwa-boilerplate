@@ -1,7 +1,4 @@
-import {
-  startOfflineExecutor,
-  IndexedDBAdapter,
-} from "@tanstack/offline-transactions";
+import { startOfflineExecutor, IndexedDBAdapter } from "@tanstack/offline-transactions";
 import { notesCollection } from "./collection";
 import { api } from "../../api";
 
@@ -20,10 +17,18 @@ export const offlineExecutor = startOfflineExecutor({
             id: string;
             title?: string;
             content?: string;
+            createdAt?: Date;
+            updatedAt?: Date;
           };
           return {
             type: m.type as "insert" | "update" | "delete",
-            data: { id: data.id, title: data.title, content: data.content },
+            data: {
+              id: data.id,
+              title: data.title,
+              content: data.content,
+              createdAt: data.createdAt?.toISOString(),
+              updatedAt: data.updatedAt?.toISOString(),
+            },
           };
         }),
       );
@@ -33,9 +38,7 @@ export const offlineExecutor = startOfflineExecutor({
         { headers: { "idempotency-key": idempotencyKey } },
       );
 
-      const otherIds = pending
-        .filter((tx) => tx.id !== transaction.id)
-        .map((tx) => tx.id);
+      const otherIds = pending.filter((tx) => tx.id !== transaction.id).map((tx) => tx.id);
       for (const id of otherIds) {
         await offlineExecutor.removeFromOutbox(id);
       }

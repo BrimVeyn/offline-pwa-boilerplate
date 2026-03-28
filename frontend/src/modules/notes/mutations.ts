@@ -13,11 +13,7 @@ export function addNote(note: { id: string; title: string; content: string }) {
   });
 }
 
-export function updateNote(vars: {
-  id: string;
-  title: string;
-  content: string;
-}) {
+export function updateNote(vars: { id: string; title: string; content: string }) {
   executeMutation(() => {
     notesCollection.update(vars.id, (draft) => {
       draft.title = vars.title;
