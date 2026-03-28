@@ -1,29 +1,30 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 interface NoteFormProps {
-  initialTitle?: string;
-  initialContent?: string;
-  onSubmit: (data: { title: string; content: string }) => void;
-  submitLabel: string;
+  initialTitle?: string
+  initialContent?: string
+  onSubmit: (data: { title: string; content: string }) => void
+  submitLabel: string
 }
 
 export function NoteForm({
-  initialTitle = "",
-  initialContent = "",
+  initialTitle = '',
+  initialContent = '',
   onSubmit,
   submitLabel,
 }: NoteFormProps) {
-  const [title, setTitle] = useState(initialTitle);
-  const [content, setContent] = useState(initialContent);
+  const [title, setTitle] = useState(initialTitle)
+  const [content, setContent] = useState(initialContent)
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    onSubmit({ title: title.trim(), content });
-  };
+    e.preventDefault()
+    if (!title.trim()) return
+    onSubmit({ title: title.trim(), content })
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -44,5 +45,5 @@ export function NoteForm({
         {submitLabel}
       </Button>
     </form>
-  );
+  )
 }

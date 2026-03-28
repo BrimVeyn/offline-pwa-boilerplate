@@ -1,10 +1,11 @@
-import type { Writer } from "@notes-pwa/shared";
-import { Card, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import type { Writer } from '@notes-pwa/shared'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardAction } from '@/components/ui/card'
 
 interface WriterCardProps {
-  writer: Writer;
-  onDelete: (id: string) => void;
+  writer: Writer
+  onDelete: (id: string) => void
 }
 
 export function WriterCard({ writer, onDelete }: WriterCardProps) {
@@ -21,5 +22,5 @@ export function WriterCard({ writer, onDelete }: WriterCardProps) {
         </CardAction>
       </CardHeader>
     </Card>
-  );
+  )
 }

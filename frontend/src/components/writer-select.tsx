@@ -1,17 +1,17 @@
-import type { Writer } from "@notes-pwa/shared";
+import type { Writer } from '@notes-pwa/shared'
 
 interface WriterSelectProps {
-  writers: Writer[];
-  value: string | null;
-  onChange: (writerId: string | null) => void;
+  writers: Writer[]
+  value: string | null
+  onChange: (writerId: string | null) => void
 }
 
 export function WriterSelect({ writers, value, onChange }: WriterSelectProps) {
   return (
     <select
-      value={value ?? ""}
+      value={value ?? ''}
       onChange={(e) => onChange(e.target.value || null)}
-      className="h-7 rounded-md border border-input bg-transparent px-2 text-xs text-foreground"
+      className="border-input text-foreground h-7 rounded-md border bg-transparent px-2 text-xs"
     >
       <option value="">No writer</option>
       {writers.map((writer) => (
@@ -20,5 +20,5 @@ export function WriterSelect({ writers, value, onChange }: WriterSelectProps) {
         </option>
       ))}
     </select>
-  );
+  )
 }
