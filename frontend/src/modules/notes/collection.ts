@@ -1,8 +1,9 @@
-import { createCollection } from "@tanstack/react-db";
-import { queryCollectionOptions } from "@tanstack/query-db-collection";
-import { QueryClient } from "@tanstack/react-query";
-import { noteSchema } from "@notes-pwa/shared";
-import { api } from "../../api";
+import { noteSchema } from '@notes-pwa/shared'
+import { queryCollectionOptions } from '@tanstack/query-db-collection'
+import { createCollection } from '@tanstack/react-db'
+import { QueryClient } from '@tanstack/react-query'
+
+import { api } from '../../lib/api'
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,23 +13,23 @@ export const queryClient = new QueryClient({
       retry: 2,
     },
   },
-});
+})
 
 export const notesCollection = createCollection(
   queryCollectionOptions({
-    id: "notes",
+    id: 'notes',
     queryClient,
     schema: noteSchema,
-    queryKey: ["notes"],
+    queryKey: ['notes'],
     getKey: (note) => note.id,
     queryFn: async () => {
-      const { data, error } = await api.notes.get();
-      if (error) throw error;
+      const { data, error } = await api.notes.get()
+      if (error) throw error
       return data.map((note) => ({
         ...note,
         createdAt: new Date(note.createdAt),
         updatedAt: new Date(note.updatedAt),
-      }));
+      }))
     },
-  }),
-);
+  })
+)
