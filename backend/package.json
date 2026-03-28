@@ -8,9 +8,12 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@notes-pwa/shared": "workspace:*",
     "@elysiajs/cors": "latest",
     "drizzle-orm": "^0.45.2",
     "elysia": "latest",
+    "zod": "^4.3.6",
+    "evlog": "^2.10.0",
     "postgres": "^3.4.8"
   },
   "devDependencies": {

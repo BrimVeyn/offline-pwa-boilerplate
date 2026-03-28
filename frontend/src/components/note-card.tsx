@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { Note } from "../api";
+import type { Note } from "@notes-pwa/shared";
 
 interface NoteCardProps {
   note: Note;

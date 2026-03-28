@@ -31,20 +31,20 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
-        runtimeCaching: [
-          {
-            urlPattern: /^http:\/\/localhost:3000\/notes/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-notes-cache",
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
-              networkTimeoutSeconds: 3,
-            },
-          },
-        ],
-      },
+      // workbox: {
+      //   globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+      // runtimeCaching: [
+      //   {
+      //     urlPattern: /^http:\/\/localhost:3000\/notes$/,
+      //     handler: "NetworkFirst",
+      //     options: {
+      //       cacheName: "api-notes-cache",
+      //       expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
+      //       networkTimeoutSeconds: 3,
+      //     },
+      //   },
+      // ],
+      // },
     }),
   ],
   resolve: {

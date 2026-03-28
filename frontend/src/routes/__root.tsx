@@ -4,7 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { queryClient, offlineExecutor } from "../collections/notes";
+import { queryClient } from "../modules/notes/collection";
+import { offlineExecutor } from "../modules/notes/offline";
 import { OfflineIndicator } from "../components/offline-indicator";
 
 export const Route = createRootRoute({

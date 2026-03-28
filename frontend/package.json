@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@notes-pwa/shared": "workspace:*",
     "@elysiajs/eden": "^1.4.8",
     "@tanstack/db": "^0.6.1",
     "@tanstack/offline-transactions": "^1.0.26",

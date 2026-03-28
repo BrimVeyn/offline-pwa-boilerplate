@@ -2,6 +2,7 @@
   "name": "notes-pwa",
   "private": true,
   "workspaces": [
+    "shared",
     "backend",
     "frontend"
   ],

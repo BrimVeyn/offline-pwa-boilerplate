@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "cache": true,
-      "dependsOn": ["^build", "^db:generate"],
+      "dependsOn": ["^build", "^dev", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env", ".env.*"],
       "outputs": ["dist/**", "out/**", "build/**"],
       "env": ["MODE", "DATABASE_URL"]

@@ -1,12 +1,16 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
-import { notesRoutes } from "./routes/notes";
+import { evlog } from "evlog/elysia";
+import { notesRoutes } from "./modules/notes";
 
 const app = new Elysia()
+  .use(evlog())
   .use(cors({ origin: "http://localhost:5173" }))
   .use(notesRoutes)
   .listen(3000);
 
-console.log(`Server running at http://${app.server?.hostname}:${app.server?.port}`);
+console.log(
+  `Server running at http://${app.server?.hostname}:${app.server?.port}`,
+);
 
 export type App = typeof app;

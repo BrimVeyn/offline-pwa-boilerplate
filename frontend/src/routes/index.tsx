@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "@tanstack/react-db";
-import { notesCollection, deleteNote } from "../collections/notes";
+import { notesCollection } from "../modules/notes/collection";
+import { deleteNote } from "../modules/notes/mutations";
 import { NoteCard } from "../components/note-card";
 
 export const Route = createFileRoute("/")({
