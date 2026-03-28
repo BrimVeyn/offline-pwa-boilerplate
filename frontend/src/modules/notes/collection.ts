@@ -16,6 +16,7 @@ export const queryClient = new QueryClient({
 
 export const notesCollection = createCollection(
   queryCollectionOptions({
+    id: "notes",
     queryClient,
     schema: noteSchema,
     queryKey: ["notes"],

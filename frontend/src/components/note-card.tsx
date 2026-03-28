@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { Note } from "@notes-pwa/shared";
+import type { Note, Writer } from "@notes-pwa/shared";
 import {
   Card,
   CardHeader,
@@ -9,13 +9,16 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { WriterSelect } from "./writer-select";
 
 interface NoteCardProps {
   note: Note;
+  writers: Writer[];
   onDelete: (id: string) => void;
+  onAssignWriter: (noteId: string, writerId: string | null) => void;
 }
 
-export function NoteCard({ note, onDelete }: NoteCardProps) {
+export function NoteCard({ note, writers, onDelete, onAssignWriter }: NoteCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -40,8 +43,13 @@ export function NoteCard({ note, onDelete }: NoteCardProps) {
           </p>
         </CardContent>
       )}
-      <CardFooter className="text-xs text-muted-foreground">
-        {new Date(note.updatedAt).toLocaleString()}
+      <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
+        <WriterSelect
+          writers={writers}
+          value={note.writerId}
+          onChange={(writerId) => onAssignWriter(note.id, writerId)}
+        />
+        <span>{new Date(note.updatedAt).toLocaleString()}</span>
       </CardFooter>
     </Card>
   );

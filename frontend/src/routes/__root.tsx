@@ -5,7 +5,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { queryClient } from "../modules/notes/collection";
-import { offlineExecutor } from "../modules/notes/offline";
+import { offlineExecutor } from "../offline";
 import { OfflineIndicator } from "../components/offline-indicator";
 
 export const Route = createRootRoute({

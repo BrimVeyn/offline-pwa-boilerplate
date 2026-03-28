@@ -8,6 +8,20 @@
       "when": 1774634064439,
       "tag": "0000_colossal_korath",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774712358402,
+      "tag": "0001_huge_zeigeist",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774714525834,
+      "tag": "0002_hesitant_vengeance",
+      "breakpoints": true
     }
   ]
 }
