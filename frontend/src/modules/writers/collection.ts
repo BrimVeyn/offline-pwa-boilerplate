@@ -1,14 +1,21 @@
-import { snakeCamelMapper } from '@electric-sql/client'
+import { FetchError, snakeCamelMapper } from '@electric-sql/client'
 import { writerSchema } from '@notes-pwa/shared'
 import { electricCollectionOptions } from '@tanstack/electric-db-collection'
-import { createCollection } from '@tanstack/react-db'
+import { BasicIndex, createCollection } from '@tanstack/react-db'
 
 export const writersCollection = createCollection(
   electricCollectionOptions({
+    autoIndex: 'eager',
+    defaultIndexType: BasicIndex,
     id: 'writers',
     schema: writerSchema,
     getKey: (writer) => writer.id,
     shapeOptions: {
+      onError: (error) => {
+        if (error instanceof FetchError && error.status === 403) {
+          return
+        }
+      },
       url: `${window.location.origin}/api/electric/writers`,
       columnMapper: snakeCamelMapper(),
       parser: {
