@@ -1,5 +1,7 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
+export * from './auth-schema'
+
 export const writers = pgTable('writers', {
   id: text('id').primaryKey(),
   firstName: text('first_name').notNull(),
