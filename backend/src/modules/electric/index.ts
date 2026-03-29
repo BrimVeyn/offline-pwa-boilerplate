@@ -1,14 +1,13 @@
 import { Elysia } from 'elysia'
 
+import { env } from '@/env'
 import { ELECTRIC_HEADERS } from '@/index'
-
-const ELECTRIC_URL = process.env.ELECTRIC_URL ?? 'http://localhost:3001'
 
 export const electricRoutes = new Elysia({ prefix: '/electric' }).get(
   '/:table',
   async ({ params, request, set }) => {
     const url = new URL(request.url)
-    const targetUrl = `${ELECTRIC_URL}/v1/shape?table=${params.table}&${url.searchParams.toString()}`
+    const targetUrl = `${env.ELECTRIC_URL}/v1/shape?table=${params.table}&${url.searchParams.toString()}`
 
     const response = await fetch(targetUrl, {
       headers: {

@@ -2,6 +2,7 @@ import { cors } from '@elysiajs/cors'
 import { Elysia } from 'elysia'
 import { evlog } from 'evlog/elysia'
 
+import { env } from '@/env'
 import { auth } from '@/lib/auth'
 import { betterAuthPlugin } from '@/lib/auth-plugin'
 import { electricRoutes } from '@/modules/electric'
@@ -19,7 +20,7 @@ const app = new Elysia()
   .use(evlog())
   .use(
     cors({
-      origin: [process.env.FRONTEND_URL!, process.env.FRONTEND_PREVIEW_URL!],
+      origin: [env.FRONTEND_URL, env.FRONTEND_PREVIEW_URL],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization'],

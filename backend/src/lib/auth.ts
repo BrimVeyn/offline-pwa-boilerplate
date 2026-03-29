@@ -2,10 +2,11 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 
 import { db } from '@/db'
+import { env } from '@/env'
 
 export const auth = betterAuth({
   basePath: '/auth',
-  trustedOrigins: [process.env.FRONTEND_URL!, process.env.FRONTEND_PREVIEW_URL!],
+  trustedOrigins: [env.FRONTEND_URL, env.FRONTEND_PREVIEW_URL],
   database: drizzleAdapter(db, {
     provider: 'pg',
   }),
