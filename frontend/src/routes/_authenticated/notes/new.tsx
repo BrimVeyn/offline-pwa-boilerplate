@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import { NoteForm } from '../../components/note-form'
-import { addNote } from '../../modules/notes/mutations'
+import { NoteForm } from '../../../components/note-form'
+import { addNote } from '../../../modules/notes/mutations'
 
-export const Route = createFileRoute('/notes/new')({
+export const Route = createFileRoute('/_authenticated/notes/new')({
   component: NewNotePage,
 })
 

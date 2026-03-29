@@ -1,11 +1,11 @@
 import { eq, useLiveQuery } from '@tanstack/react-db'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import { NoteForm } from '../../components/note-form'
-import { notesCollection } from '../../modules/notes/collection'
-import { updateNote } from '../../modules/notes/mutations'
+import { NoteForm } from '../../../components/note-form'
+import { notesCollection } from '../../../modules/notes/collection'
+import { updateNote } from '../../../modules/notes/mutations'
 
-export const Route = createFileRoute('/notes/$noteId/edit')({
+export const Route = createFileRoute('/_authenticated/notes/$noteId/edit')({
   component: EditNotePage,
 })
 

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_online-only/admin')({
+export const Route = createFileRoute('/_authenticated/_online-only/admin')({
   component: AdminPage,
 })
 

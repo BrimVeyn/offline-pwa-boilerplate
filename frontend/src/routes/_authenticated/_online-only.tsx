@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
 
 import { useIsOnline } from '@/hooks/use-is-online'
 
-export const Route = createFileRoute('/_online-only')({
+export const Route = createFileRoute('/_authenticated/_online-only')({
   component: OnlineOnlyLayout,
 })
 

@@ -9,135 +9,239 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as OnlineOnlyRouteImport } from './routes/_online-only'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as NotesNewRouteImport } from './routes/notes/new'
-import { Route as OnlineOnlyAdminRouteImport } from './routes/_online-only/admin'
-import { Route as NotesNoteIdEditRouteImport } from './routes/notes/$noteId.edit'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedOnlineOnlyRouteImport } from './routes/_authenticated/_online-only'
+import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthenticatedNotesNewRouteImport } from './routes/_authenticated/notes/new'
+import { Route as AuthenticatedOnlineOnlyAdminRouteImport } from './routes/_authenticated/_online-only/admin'
+import { Route as AuthenticatedNotesNoteIdEditRouteImport } from './routes/_authenticated/notes/$noteId.edit'
 
-const OnlineOnlyRoute = OnlineOnlyRouteImport.update({
-  id: '/_online-only',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const NotesNewRoute = NotesNewRouteImport.update({
+const AuthenticatedOnlineOnlyRoute = AuthenticatedOnlineOnlyRouteImport.update({
+  id: '/_online-only',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthenticatedNotesNewRoute = AuthenticatedNotesNewRouteImport.update({
   id: '/notes/new',
   path: '/notes/new',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const OnlineOnlyAdminRoute = OnlineOnlyAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => OnlineOnlyRoute,
-} as any)
-const NotesNoteIdEditRoute = NotesNoteIdEditRouteImport.update({
-  id: '/notes/$noteId/edit',
-  path: '/notes/$noteId/edit',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedOnlineOnlyAdminRoute =
+  AuthenticatedOnlineOnlyAdminRouteImport.update({
+    id: '/admin',
+    path: '/admin',
+    getParentRoute: () => AuthenticatedOnlineOnlyRoute,
+  } as any)
+const AuthenticatedNotesNoteIdEditRoute =
+  AuthenticatedNotesNoteIdEditRouteImport.update({
+    id: '/notes/$noteId/edit',
+    path: '/notes/$noteId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/admin': typeof OnlineOnlyAdminRoute
-  '/notes/new': typeof NotesNewRoute
-  '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
+  '/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/notes/new': typeof AuthenticatedNotesNewRoute
+  '/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/admin': typeof OnlineOnlyAdminRoute
-  '/notes/new': typeof NotesNewRoute
-  '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
+  '/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/notes/new': typeof AuthenticatedNotesNewRoute
+  '/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_online-only': typeof OnlineOnlyRouteWithChildren
-  '/_online-only/admin': typeof OnlineOnlyAdminRoute
-  '/notes/new': typeof NotesNewRoute
-  '/notes/$noteId/edit': typeof NotesNoteIdEditRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/signup': typeof AuthSignupRoute
+  '/_authenticated/_online-only': typeof AuthenticatedOnlineOnlyRouteWithChildren
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/_online-only/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/_authenticated/notes/new': typeof AuthenticatedNotesNewRoute
+  '/_authenticated/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/notes/new' | '/notes/$noteId/edit'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/notes/new' | '/notes/$noteId/edit'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
-    | '/_online-only'
-    | '/_online-only/admin'
+    | '/login'
+    | '/signup'
+    | '/admin'
     | '/notes/new'
     | '/notes/$noteId/edit'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/admin'
+    | '/notes/new'
+    | '/notes/$noteId/edit'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_authenticated'
+    | '/_auth/login'
+    | '/_auth/signup'
+    | '/_authenticated/_online-only'
+    | '/_authenticated/'
+    | '/_authenticated/_online-only/admin'
+    | '/_authenticated/notes/new'
+    | '/_authenticated/notes/$noteId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  OnlineOnlyRoute: typeof OnlineOnlyRouteWithChildren
-  NotesNewRoute: typeof NotesNewRoute
-  NotesNoteIdEditRoute: typeof NotesNoteIdEditRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_online-only': {
-      id: '/_online-only'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof OnlineOnlyRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/notes/new': {
-      id: '/notes/new'
+    '/_authenticated/_online-only': {
+      id: '/_authenticated/_online-only'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedOnlineOnlyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_auth/signup': {
+      id: '/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_authenticated/notes/new': {
+      id: '/_authenticated/notes/new'
       path: '/notes/new'
       fullPath: '/notes/new'
-      preLoaderRoute: typeof NotesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedNotesNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_online-only/admin': {
-      id: '/_online-only/admin'
+    '/_authenticated/_online-only/admin': {
+      id: '/_authenticated/_online-only/admin'
       path: '/admin'
       fullPath: '/admin'
-      preLoaderRoute: typeof OnlineOnlyAdminRouteImport
-      parentRoute: typeof OnlineOnlyRoute
+      preLoaderRoute: typeof AuthenticatedOnlineOnlyAdminRouteImport
+      parentRoute: typeof AuthenticatedOnlineOnlyRoute
     }
-    '/notes/$noteId/edit': {
-      id: '/notes/$noteId/edit'
+    '/_authenticated/notes/$noteId/edit': {
+      id: '/_authenticated/notes/$noteId/edit'
       path: '/notes/$noteId/edit'
       fullPath: '/notes/$noteId/edit'
-      preLoaderRoute: typeof NotesNoteIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedNotesNoteIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface OnlineOnlyRouteChildren {
-  OnlineOnlyAdminRoute: typeof OnlineOnlyAdminRoute
+interface AuthRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
 }
 
-const OnlineOnlyRouteChildren: OnlineOnlyRouteChildren = {
-  OnlineOnlyAdminRoute: OnlineOnlyAdminRoute,
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
 }
 
-const OnlineOnlyRouteWithChildren = OnlineOnlyRoute._addFileChildren(
-  OnlineOnlyRouteChildren,
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface AuthenticatedOnlineOnlyRouteChildren {
+  AuthenticatedOnlineOnlyAdminRoute: typeof AuthenticatedOnlineOnlyAdminRoute
+}
+
+const AuthenticatedOnlineOnlyRouteChildren: AuthenticatedOnlineOnlyRouteChildren =
+  {
+    AuthenticatedOnlineOnlyAdminRoute: AuthenticatedOnlineOnlyAdminRoute,
+  }
+
+const AuthenticatedOnlineOnlyRouteWithChildren =
+  AuthenticatedOnlineOnlyRoute._addFileChildren(
+    AuthenticatedOnlineOnlyRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedOnlineOnlyRoute: typeof AuthenticatedOnlineOnlyRouteWithChildren
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedNotesNewRoute: typeof AuthenticatedNotesNewRoute
+  AuthenticatedNotesNoteIdEditRoute: typeof AuthenticatedNotesNoteIdEditRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedOnlineOnlyRoute: AuthenticatedOnlineOnlyRouteWithChildren,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedNotesNewRoute: AuthenticatedNotesNewRoute,
+  AuthenticatedNotesNoteIdEditRoute: AuthenticatedNotesNoteIdEditRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  OnlineOnlyRoute: OnlineOnlyRouteWithChildren,
-  NotesNewRoute: NotesNewRoute,
-  NotesNoteIdEditRoute: NotesNoteIdEditRoute,
+  AuthRoute: AuthRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -4,15 +4,16 @@ import { useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth-client'
 
-import { NoteCard } from '../components/note-card'
-import { WriterCard } from '../components/writer-card'
-import { notesCollection } from '../modules/notes/collection'
-import { deleteNote, assignWriter } from '../modules/notes/mutations'
-import { writersCollection } from '../modules/writers/collection'
-import { addWriter, deleteWriter } from '../modules/writers/mutations'
+import { NoteCard } from '../../components/note-card'
+import { WriterCard } from '../../components/writer-card'
+import { notesCollection } from '../../modules/notes/collection'
+import { deleteNote, assignWriter } from '../../modules/notes/mutations'
+import { writersCollection } from '../../modules/writers/collection'
+import { addWriter, deleteWriter } from '../../modules/writers/mutations'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authenticated/')({
   component: HomePage,
 })
 
@@ -42,6 +43,14 @@ function HomePage() {
 
   return (
     <div className="flex flex-col gap-8">
+      <Button
+        onClick={async () => {
+          await authClient.signOut()
+          window.location.reload()
+        }}
+      >
+        Sign out
+      </Button>
       {/* Writers section */}
       <section>
         <h2 className="mb-4 text-xl font-bold">Writers</h2>
