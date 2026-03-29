@@ -16,6 +16,8 @@ import { Route as AuthenticatedOnlineOnlyRouteImport } from './routes/_authentic
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthenticatedNotesNewRouteImport } from './routes/_authenticated/notes/new'
+import { Route as AuthenticatedOnlineOnlyTrashRouteImport } from './routes/_authenticated/_online-only/trash'
+import { Route as AuthenticatedOnlineOnlyAuditLogRouteImport } from './routes/_authenticated/_online-only/audit-log'
 import { Route as AuthenticatedOnlineOnlyAdminRouteImport } from './routes/_authenticated/_online-only/admin'
 import { Route as AuthenticatedNotesNoteIdEditRouteImport } from './routes/_authenticated/notes/$noteId.edit'
 
@@ -51,6 +53,18 @@ const AuthenticatedNotesNewRoute = AuthenticatedNotesNewRouteImport.update({
   path: '/notes/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedOnlineOnlyTrashRoute =
+  AuthenticatedOnlineOnlyTrashRouteImport.update({
+    id: '/trash',
+    path: '/trash',
+    getParentRoute: () => AuthenticatedOnlineOnlyRoute,
+  } as any)
+const AuthenticatedOnlineOnlyAuditLogRoute =
+  AuthenticatedOnlineOnlyAuditLogRouteImport.update({
+    id: '/audit-log',
+    path: '/audit-log',
+    getParentRoute: () => AuthenticatedOnlineOnlyRoute,
+  } as any)
 const AuthenticatedOnlineOnlyAdminRoute =
   AuthenticatedOnlineOnlyAdminRouteImport.update({
     id: '/admin',
@@ -69,6 +83,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/audit-log': typeof AuthenticatedOnlineOnlyAuditLogRoute
+  '/trash': typeof AuthenticatedOnlineOnlyTrashRoute
   '/notes/new': typeof AuthenticatedNotesNewRoute
   '/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
@@ -77,6 +93,8 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/audit-log': typeof AuthenticatedOnlineOnlyAuditLogRoute
+  '/trash': typeof AuthenticatedOnlineOnlyTrashRoute
   '/notes/new': typeof AuthenticatedNotesNewRoute
   '/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
@@ -89,6 +107,8 @@ export interface FileRoutesById {
   '/_authenticated/_online-only': typeof AuthenticatedOnlineOnlyRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/_online-only/admin': typeof AuthenticatedOnlineOnlyAdminRoute
+  '/_authenticated/_online-only/audit-log': typeof AuthenticatedOnlineOnlyAuditLogRoute
+  '/_authenticated/_online-only/trash': typeof AuthenticatedOnlineOnlyTrashRoute
   '/_authenticated/notes/new': typeof AuthenticatedNotesNewRoute
   '/_authenticated/notes/$noteId/edit': typeof AuthenticatedNotesNoteIdEditRoute
 }
@@ -99,6 +119,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/admin'
+    | '/audit-log'
+    | '/trash'
     | '/notes/new'
     | '/notes/$noteId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -107,6 +129,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/admin'
+    | '/audit-log'
+    | '/trash'
     | '/notes/new'
     | '/notes/$noteId/edit'
   id:
@@ -118,6 +142,8 @@ export interface FileRouteTypes {
     | '/_authenticated/_online-only'
     | '/_authenticated/'
     | '/_authenticated/_online-only/admin'
+    | '/_authenticated/_online-only/audit-log'
+    | '/_authenticated/_online-only/trash'
     | '/_authenticated/notes/new'
     | '/_authenticated/notes/$noteId/edit'
   fileRoutesById: FileRoutesById
@@ -178,6 +204,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNotesNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/_online-only/trash': {
+      id: '/_authenticated/_online-only/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof AuthenticatedOnlineOnlyTrashRouteImport
+      parentRoute: typeof AuthenticatedOnlineOnlyRoute
+    }
+    '/_authenticated/_online-only/audit-log': {
+      id: '/_authenticated/_online-only/audit-log'
+      path: '/audit-log'
+      fullPath: '/audit-log'
+      preLoaderRoute: typeof AuthenticatedOnlineOnlyAuditLogRouteImport
+      parentRoute: typeof AuthenticatedOnlineOnlyRoute
+    }
     '/_authenticated/_online-only/admin': {
       id: '/_authenticated/_online-only/admin'
       path: '/admin'
@@ -209,11 +249,15 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticatedOnlineOnlyRouteChildren {
   AuthenticatedOnlineOnlyAdminRoute: typeof AuthenticatedOnlineOnlyAdminRoute
+  AuthenticatedOnlineOnlyAuditLogRoute: typeof AuthenticatedOnlineOnlyAuditLogRoute
+  AuthenticatedOnlineOnlyTrashRoute: typeof AuthenticatedOnlineOnlyTrashRoute
 }
 
 const AuthenticatedOnlineOnlyRouteChildren: AuthenticatedOnlineOnlyRouteChildren =
   {
     AuthenticatedOnlineOnlyAdminRoute: AuthenticatedOnlineOnlyAdminRoute,
+    AuthenticatedOnlineOnlyAuditLogRoute: AuthenticatedOnlineOnlyAuditLogRoute,
+    AuthenticatedOnlineOnlyTrashRoute: AuthenticatedOnlineOnlyTrashRoute,
   }
 
 const AuthenticatedOnlineOnlyRouteWithChildren =

@@ -1,3 +1,4 @@
+export { auditLogSchema, type AuditLog } from './schemas/audit-log'
 export { noteSchema, type Note } from './schemas/note'
 export { writerSchema, type Writer } from './schemas/writer'
 export {

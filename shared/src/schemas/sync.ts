@@ -9,6 +9,7 @@ export const noteInsertDataSchema = z4.object({
   writerId: z4.nullable(z4.string()),
   createdAt: z4.iso.datetime(),
   updatedAt: z4.iso.datetime(),
+  deletedAt: z4.optional(z4.nullable(z4.iso.datetime())),
 })
 
 export const noteUpdateDataSchema = z4.object({
@@ -17,6 +18,7 @@ export const noteUpdateDataSchema = z4.object({
   content: z4.optional(z4.string()),
   writerId: z4.optional(z4.nullable(z4.string())),
   updatedAt: z4.optional(z4.iso.datetime()),
+  deletedAt: z4.optional(z4.nullable(z4.iso.datetime())),
 })
 
 export const noteDeleteDataSchema = z4.object({
@@ -31,6 +33,7 @@ export const writerInsertDataSchema = z4.object({
   lastName: z4.string(),
   createdAt: z4.iso.datetime(),
   updatedAt: z4.iso.datetime(),
+  deletedAt: z4.optional(z4.nullable(z4.iso.datetime())),
 })
 
 export const writerUpdateDataSchema = z4.object({
@@ -38,6 +41,7 @@ export const writerUpdateDataSchema = z4.object({
   firstName: z4.optional(z4.string()),
   lastName: z4.optional(z4.string()),
   updatedAt: z4.optional(z4.iso.datetime()),
+  deletedAt: z4.optional(z4.nullable(z4.iso.datetime())),
 })
 
 export const writerDeleteDataSchema = z4.object({

@@ -12,6 +12,7 @@ export function addNote(note: { id: string; title: string; content: string }) {
       writerId: null,
       createdAt: new Date(),
       updatedAt: new Date(),
+      deletedAt: null,
     })
   })
 }

@@ -14,7 +14,16 @@ export const electricRoutes = new Elysia({ prefix: '/electric' })
     }
 
     const url = new URL(request.url)
-    const targetUrl = `${env.ELECTRIC_URL}/v1/shape?table=${params.table}&${url.searchParams.toString()}`
+    const softDeletableTables = ['notes', 'writers']
+    const showDeleted = url.searchParams.get('deleted') === 'true'
+    url.searchParams.delete('deleted')
+
+    let whereClause = ''
+    if (softDeletableTables.includes(params.table)) {
+      const condition = showDeleted ? '"deleted_at" IS NOT NULL' : '"deleted_at" IS NULL'
+      whereClause = `&where=${encodeURIComponent(condition)}`
+    }
+    const targetUrl = `${env.ELECTRIC_URL}/v1/shape?table=${params.table}${whereClause}&${url.searchParams.toString()}`
 
     const response = await fetch(targetUrl, {
       headers: {

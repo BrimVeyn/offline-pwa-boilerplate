@@ -12,6 +12,7 @@ export function addWriter(writer: { id: string; firstName: string; lastName: str
       lastName: writer.lastName,
       createdAt: new Date(),
       updatedAt: new Date(),
+      deletedAt: null,
     })
   })
 }

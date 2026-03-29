@@ -11,7 +11,7 @@ export const PERMISSIONS: Record<
   }
 > = {
   admin: {
-    readableTables: ['notes', 'writers'],
+    readableTables: ['notes', 'writers', 'audit_logs'],
     allowedMutationKinds: [
       'notes:insert',
       'notes:update',

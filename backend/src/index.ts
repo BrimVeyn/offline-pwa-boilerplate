@@ -6,6 +6,7 @@ import { env } from '@/env'
 import { betterAuthPlugin } from '@/lib/auth-plugin'
 import { electricRoutes } from '@/modules/electric'
 import { syncRoutes } from '@/modules/sync'
+import { trashRoutes } from '@/modules/trash'
 
 export const ELECTRIC_HEADERS = [
   'electric-cursor',
@@ -27,7 +28,7 @@ const app = new Elysia()
     })
   )
   .use(betterAuthPlugin)
-  .group('/api', (app) => app.use(syncRoutes).use(electricRoutes))
+  .group('/api', (app) => app.use(syncRoutes).use(electricRoutes).use(trashRoutes))
   .listen({ port: 3000, hostname: '0.0.0.0' })
 
 // oxlint-disable-next-line no-console

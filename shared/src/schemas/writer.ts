@@ -6,6 +6,7 @@ export const writerSchema = z4.object({
   lastName: z4.string(),
   createdAt: z4.date(),
   updatedAt: z4.date(),
+  deletedAt: z4.nullable(z4.date()),
 })
 
 export type Writer = z4.infer<typeof writerSchema>

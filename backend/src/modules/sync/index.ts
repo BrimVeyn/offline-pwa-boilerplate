@@ -30,7 +30,7 @@ export const syncRoutes = new Elysia()
       log.info(`Sync request: ${body.mutations.length} mutations`)
       log.set(Object.fromEntries(body.mutations.map((m, i) => [`mutation-${i}`, m])))
 
-      const txid = await SyncService.sync(body.mutations)
+      const txid = await SyncService.sync(body.mutations, user.id)
 
       return {
         success: true,

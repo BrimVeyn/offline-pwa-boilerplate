@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useIsAdmin } from '@/hooks/use-is-admin'
 import { authClient } from '@/lib/auth-client'
 
 import { NoteCard } from '../../components/note-card'
@@ -18,6 +19,8 @@ export const Route = createFileRoute('/_authenticated/')({
 })
 
 function HomePage() {
+  const isAdmin = useIsAdmin()
+
   const { data: notes } = useLiveQuery((q) =>
     q.from({ note: notesCollection }).orderBy(({ note }) => note.updatedAt, 'desc')
   )
@@ -43,14 +46,26 @@ function HomePage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <Button
-        onClick={async () => {
-          await authClient.signOut()
-          window.location.reload()
-        }}
-      >
-        Sign out
-      </Button>
+      <div className="flex items-center gap-2">
+        {isAdmin && (
+          <>
+            <Link to="/trash" className={buttonVariants({ variant: 'outline' })}>
+              Trash
+            </Link>
+            <Link to="/audit-log" className={buttonVariants({ variant: 'outline' })}>
+              Audit Log
+            </Link>
+          </>
+        )}
+        <Button
+          onClick={async () => {
+            await authClient.signOut()
+            window.location.reload()
+          }}
+        >
+          Sign out
+        </Button>
+      </div>
       {/* Writers section */}
       <section>
         <h2 className="mb-4 text-xl font-bold">Writers</h2>
