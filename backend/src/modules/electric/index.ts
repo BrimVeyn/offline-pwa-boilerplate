@@ -7,11 +7,10 @@ import { authGuard } from '@/lib/auth-guard'
 
 export const electricRoutes = new Elysia({ prefix: '/electric' })
   .use(authGuard)
-  .get('/:table', async ({ params, request, set, user }) => {
+  .get('/:table', async ({ params, request, set, user, status }) => {
     const perms = PERMISSIONS[user.role as Role]
-    if (!perms.readableTables.includes(params.table)) {
-      set.status = 403
-      return JSON.stringify({ error: 'Forbidden' })
+    if (!perms?.readableTables.includes(params.table)) {
+      return status('Forbidden', { error: 'Forbidden' })
     }
 
     const url = new URL(request.url)
