@@ -5,7 +5,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { OfflineIndicator } from '../components/offline-indicator'
-import { queryClient } from '../modules/notes/collection'
+import { queryClient } from '../lib/query-client'
 
 export const Route = createRootRoute({
   component: RootComponent,

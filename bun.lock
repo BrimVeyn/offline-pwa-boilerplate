@@ -39,6 +39,7 @@
         "@tailwindcss/vite": "^4.2.2",
         "@tanstack/db": "^0.6.1",
         "@tanstack/electric-db-collection": "^0.2.43",
+        "@tanstack/offline-transactions": "^1.0.26",
         "@tanstack/react-db": "^0.1.79",
         "@tanstack/react-form": "^1.28.5",
         "@tanstack/react-query": "^5.95.2",
@@ -635,6 +636,8 @@
     "@tanstack/form-core": ["@tanstack/form-core@1.28.5", "", { "dependencies": { "@tanstack/devtools-event-client": "^0.4.1", "@tanstack/pacer-lite": "^0.1.1", "@tanstack/store": "^0.9.1" } }, "sha512-8lYnduHHfP6uaXF9+2OLnh3Fo27tH4TdtekWLG2b/Bp26ynbrWG6L4qhBgEb7VcvTpJw/RjvJF/JyFhZkG3pfQ=="],
 
     "@tanstack/history": ["@tanstack/history@1.161.6", "", {}, "sha512-NaOGLRrddszbQj9upGat6HG/4TKvXLvu+osAIgfxPYA+eIvYKv8GKDJOrY2D3/U9MRnKfMWD7bU4jeD4xmqyIg=="],
+
+    "@tanstack/offline-transactions": ["@tanstack/offline-transactions@1.0.26", "", { "dependencies": { "@tanstack/db": "0.6.1" }, "peerDependencies": { "@react-native-community/netinfo": ">=11.0.0", "react-native": ">=0.70.0" }, "optionalPeers": ["@react-native-community/netinfo", "react-native"] }, "sha512-zDzc3GnH9JncUNSZzPQUKrwrsgGumNcdtj6ifFvgj9P4TldqYn9+ZdD1wjD4J5abfidUrAPRM3sSTIxEcaRB1Q=="],
 
     "@tanstack/pacer-lite": ["@tanstack/pacer-lite@0.2.1", "", {}, "sha512-3PouiFjR4B6x1c969/Pl4ZIJleof1M0n6fNX8NRiC9Sqv1g06CVDlEaXUR4212ycGFyfq4q+t8Gi37Xy+z34iQ=="],
 
