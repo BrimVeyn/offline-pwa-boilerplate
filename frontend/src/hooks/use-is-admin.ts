@@ -1,7 +1,6 @@
-import { authClient } from '@/lib/auth-client'
+import { useRouteContext } from '@tanstack/react-router'
 
 export function useIsAdmin() {
-  const { data: session } = authClient.useSession()
-  const role = (session?.user as Record<string, unknown> | undefined)?.role
-  return role === 'admin'
+  const { session } = useRouteContext({ from: '/_authenticated' })
+  return session.user.role === 'admin'
 }

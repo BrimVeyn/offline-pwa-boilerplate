@@ -1,24 +1,23 @@
 import { useLiveQuery } from '@tanstack/react-db'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { api } from '@/lib/api'
-import { authClient } from '@/lib/auth-client'
 
 import { deletedNotesCollection } from '../../../modules/trash/deleted-notes-collection'
 import { deletedWritersCollection } from '../../../modules/trash/deleted-writers-collection'
 
 export const Route = createFileRoute('/_authenticated/_online-only/trash')({
+  beforeLoad: ({ context }) => {
+    if (context.session.user.role !== 'admin') throw redirect({ to: '/' })
+  },
   component: TrashPage,
 })
 
 function TrashPage() {
-  const { data: session } = authClient.useSession()
-  const role = (session?.user as Record<string, unknown> | undefined)?.role as string | undefined
-
   const { data: notes } = useLiveQuery((q) =>
     q.from({ note: deletedNotesCollection }).orderBy(({ note }) => note.deletedAt, 'desc')
   )
@@ -28,18 +27,6 @@ function TrashPage() {
   )
 
   const [restoring, setRestoring] = useState<string | null>(null)
-
-  if (role !== 'admin') {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-        <h1 className="text-2xl font-bold">Access Denied</h1>
-        <p className="text-muted-foreground">Only admins can access the trash.</p>
-        <Link to="/" className="text-primary underline">
-          Go back to home
-        </Link>
-      </div>
-    )
-  }
 
   const restoreNote = async (id: string) => {
     setRestoring(id)

@@ -1,4 +1,4 @@
-import { PERMISSIONS, type Role } from '@notes-pwa/shared'
+import { authAdditionalFields, PERMISSIONS, type Role } from '@notes-pwa/shared'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { eq } from 'drizzle-orm'
@@ -20,21 +20,10 @@ export const auth = betterAuth({
     maxPasswordLength: 32,
   },
   user: {
-    additionalFields: {
-      role: {
-        type: 'string',
-        input: true,
-        defaultValue: 'viewer',
-      },
-    },
+    additionalFields: authAdditionalFields.user,
   },
   session: {
-    additionalFields: {
-      allowedMutationKinds: {
-        type: 'string',
-        required: false,
-      },
-    },
+    additionalFields: authAdditionalFields.session,
   },
   databaseHooks: {
     session: {

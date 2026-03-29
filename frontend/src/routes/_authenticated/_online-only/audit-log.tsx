@@ -1,13 +1,12 @@
 import type { AuditLog } from '@notes-pwa/shared'
 
 import { useLiveQuery } from '@tanstack/react-db'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
 import z4 from 'zod/v4'
 
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { authClient } from '@/lib/auth-client'
 
 import { auditLogsCollection } from '../../../modules/audit-logs/collection'
 
@@ -18,6 +17,9 @@ const searchSchema = z4.object({
 })
 
 export const Route = createFileRoute('/_authenticated/_online-only/audit-log')({
+  beforeLoad: ({ context }) => {
+    if (context.session.user.role !== 'admin') throw redirect({ to: '/' })
+  },
   component: AuditLogPage,
   validateSearch: searchSchema,
 })
@@ -33,26 +35,12 @@ function matchesFilters(entry: AuditLog, table?: string, action?: string) {
 }
 
 function AuditLogPage() {
-  const { data: session } = authClient.useSession()
-  const role = (session?.user as Record<string, unknown> | undefined)?.role as string | undefined
   const navigate = useNavigate({ from: '/audit-log' })
   const { table, action, offset } = Route.useSearch()
 
   const { data: allEntries } = useLiveQuery((q) =>
     q.from({ log: auditLogsCollection }).orderBy(({ log }) => log.createdAt, 'desc')
   )
-
-  if (role !== 'admin') {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-        <h1 className="text-2xl font-bold">Access Denied</h1>
-        <p className="text-muted-foreground">Only admins can view audit logs.</p>
-        <Link to="/" className="text-primary underline">
-          Go back to home
-        </Link>
-      </div>
-    )
-  }
 
   const filtered = allEntries.filter((e) => matchesFilters(e, table, action))
   const entries = filtered.slice(offset, offset + PAGE_SIZE)
