@@ -1,16 +1,18 @@
 import { tryCatch, type SyncMutation } from '@notes-pwa/shared'
+import { sql } from 'drizzle-orm'
 import { useLogger } from 'evlog/elysia'
+
+import type { SyncModel } from '@/modules/sync/model'
 
 import { db } from '@/db'
 import { NoteEntity } from '@/modules/entities/notes/service'
 import { WriterEntity } from '@/modules/entities/writers/service'
-import { SyncModel } from '@/modules/sync/model'
 
 export abstract class SyncService {
   static async sync(mutations: SyncMutation[]) {
     const log = useLogger()
 
-    await db.transaction(async (tx) => {
+    return await db.transaction(async (tx) => {
       for (const mutation of mutations) {
         log.info(`Processing: ${mutation.kind} id=${mutation.data.id}`)
 
@@ -23,6 +25,11 @@ export abstract class SyncService {
 
         log.info(`Success: ${mutation.kind} id=${mutation.data.id}`)
       }
+
+      const [row] = await tx.execute<{ txid: string }>(
+        sql`SELECT pg_current_xact_id()::text AS txid`
+      )
+      return parseInt(row.txid, 10)
     })
   }
 

@@ -1,25 +1,66 @@
-import { writerSchema } from '@notes-pwa/shared'
-import { queryCollectionOptions } from '@tanstack/query-db-collection'
+import { snakeCamelMapper } from '@electric-sql/client'
+import { writerSchema, type SyncMutation } from '@notes-pwa/shared'
+import { electricCollectionOptions } from '@tanstack/electric-db-collection'
 import { createCollection } from '@tanstack/react-db'
 
 import { api } from '../../lib/api'
-import { queryClient } from '../notes/collection'
+
+async function syncMutations(mutations: SyncMutation[]) {
+  return api.sync.post({ mutations }).then(({ data, error }) => {
+    if (error) throw error
+    return { txid: data.txid }
+  })
+}
 
 export const writersCollection = createCollection(
-  queryCollectionOptions({
+  electricCollectionOptions({
     id: 'writers',
-    queryClient,
     schema: writerSchema,
-    queryKey: ['writers'],
     getKey: (writer) => writer.id,
-    queryFn: async () => {
-      const { data, error } = await api.writers.get()
-      if (error) throw error
-      return data.map((writer) => ({
-        ...writer,
-        createdAt: new Date(writer.createdAt),
-        updatedAt: new Date(writer.updatedAt),
-      }))
+    shapeOptions: {
+      url: `${window.location.origin}/api/electric/writers`,
+      columnMapper: snakeCamelMapper(),
+      parser: {
+        timestamptz: (value: string) => new Date(value),
+      },
+      params: { table: 'writers' },
+    },
+    onInsert: async ({ transaction }) => {
+      const writer = transaction.mutations[0].modified
+      return syncMutations([
+        {
+          kind: 'writers:insert',
+          data: {
+            id: writer.id,
+            firstName: writer.firstName,
+            lastName: writer.lastName,
+            createdAt: writer.createdAt.toISOString(),
+            updatedAt: writer.updatedAt.toISOString(),
+          },
+        },
+      ])
+    },
+    onUpdate: async ({ transaction }) => {
+      const { original, changes } = transaction.mutations[0]
+      return syncMutations([
+        {
+          kind: 'writers:update',
+          data: {
+            id: original.id,
+            ...(changes.firstName !== undefined && { firstName: changes.firstName }),
+            ...(changes.lastName !== undefined && { lastName: changes.lastName }),
+            ...(changes.updatedAt && { updatedAt: changes.updatedAt.toISOString() }),
+          },
+        },
+      ])
+    },
+    onDelete: async ({ transaction }) => {
+      return syncMutations([
+        {
+          kind: 'writers:delete',
+          data: { id: transaction.mutations[0].key as string },
+        },
+      ])
     },
   })
 )

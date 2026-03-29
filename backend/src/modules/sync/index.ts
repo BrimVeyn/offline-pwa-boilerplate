@@ -16,12 +16,13 @@ export const syncRoutes = new Elysia()
       log.info(`Sync request: ${body.mutations.length} mutations`)
       log.set(Object.fromEntries(body.mutations.map((m, i) => [`mutation-${i}`, m])))
 
-      await SyncService.sync(body.mutations)
+      const txid = await SyncService.sync(body.mutations)
 
       return {
         success: true,
         processed: body.mutations.length,
         idempotencyKey: headers['idempotency-key'],
+        txid,
       }
     },
     { body: syncBodySchema }
