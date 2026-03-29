@@ -1,7 +1,10 @@
+import { PERMISSIONS, type Role } from '@notes-pwa/shared'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
+import { user as userTable } from '@/db/auth-schema'
 import { env } from '@/env'
 
 export const auth = betterAuth({
@@ -15,6 +18,42 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
     maxPasswordLength: 32,
+  },
+  user: {
+    additionalFields: {
+      role: {
+        type: 'string',
+        input: true,
+        defaultValue: 'viewer',
+      },
+    },
+  },
+  session: {
+    additionalFields: {
+      allowedMutationKinds: {
+        type: 'string',
+        required: false,
+      },
+    },
+  },
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const [user] = await db
+            .select({ role: userTable.role })
+            .from(userTable)
+            .where(eq(userTable.id, session.userId))
+          const perms = PERMISSIONS[(user?.role as Role) ?? 'viewer']
+          return {
+            data: {
+              ...session,
+              allowedMutationKinds: JSON.stringify(perms.allowedMutationKinds),
+            },
+          }
+        },
+      },
+    },
   },
   experimental: {
     joins: true,

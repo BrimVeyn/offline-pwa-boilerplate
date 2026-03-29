@@ -1,6 +1,22 @@
-# Notes PWA
+# Offline PWA Boilerplate
 
-A local-first collaborative notes app built as a progressive web app.
+A local-first boilerplate with role-based permissions that work both online and offline.
+
+Built as a notes app to demonstrate the full stack: real-time sync, offline mutations, and a permission system where the server is the single source of truth — but enforcement happens client-side too, so unauthorized actions are blocked even without a network connection.
+
+## How Permissions Work
+
+Roles (admin, editor, viewer) are assigned at signup. The server computes the list of allowed mutation kinds and stores it in the session. The frontend reads this from the session payload and guards every mutation function before it touches the local collection.
+
+| Role | Readable Tables | Mutations |
+|------|----------------|-----------|
+| **admin** | notes, writers | all |
+| **editor** | notes, writers | notes only |
+| **viewer** | notes | none |
+
+**Online**: server rejects unauthorized sync requests with 403 and blocks Electric shape reads for forbidden tables.
+
+**Offline**: `assertAllowed()` runs before `executeMutation()` — the local collection is never modified, and a toast notifies the user.
 
 ## Tech Stack
 
@@ -8,8 +24,9 @@ A local-first collaborative notes app built as a progressive web app.
 |-------|------|
 | **Frontend** | React 19, Vite, TailwindCSS 4, TanStack Router/Query/Form/Table, Base UI, shadcn |
 | **Backend** | Elysia (Bun), Drizzle ORM, PostgreSQL |
-| **Auth** | BetterAuth (email + password) |
+| **Auth** | BetterAuth (email + password, role on signup) |
 | **Sync** | ElectricSQL, TanStack DB with offline transactions |
+| **Permissions** | Server-authoritative roles, client-side enforcement via session payload |
 | **Monorepo** | Bun workspaces, Turborepo |
 | **Quality** | OxLint, OxFmt, Lefthook |
 

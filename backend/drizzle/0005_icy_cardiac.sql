@@ -1,0 +1,1 @@
+ALTER TABLE "session" ADD COLUMN "allowed_mutation_kinds" text;

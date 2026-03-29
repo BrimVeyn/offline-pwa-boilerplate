@@ -13,3 +13,4 @@ export {
   type SyncMutationKind,
 } from './schemas/sync'
 export { tryCatch } from './try-catch'
+export { ROLES, PERMISSIONS, type Role } from './permissions'

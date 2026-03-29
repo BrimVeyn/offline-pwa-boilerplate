@@ -3,7 +3,6 @@ import { Elysia } from 'elysia'
 import { evlog } from 'evlog/elysia'
 
 import { env } from '@/env'
-import { auth } from '@/lib/auth'
 import { betterAuthPlugin } from '@/lib/auth-plugin'
 import { electricRoutes } from '@/modules/electric'
 import { syncRoutes } from '@/modules/sync'
@@ -28,18 +27,7 @@ const app = new Elysia()
     })
   )
   .use(betterAuthPlugin)
-  .group('/api', (app) =>
-    app
-      .onBeforeHandle(async ({ request, set }) => {
-        const session = await auth.api.getSession({ headers: request.headers })
-        if (!session) {
-          set.status = 401
-          return { error: 'Unauthorized' }
-        }
-      })
-      .use(syncRoutes)
-      .use(electricRoutes)
-  )
+  .group('/api', (app) => app.use(syncRoutes).use(electricRoutes))
   .listen({ port: 3000, hostname: '0.0.0.0' })
 
 // oxlint-disable-next-line no-console

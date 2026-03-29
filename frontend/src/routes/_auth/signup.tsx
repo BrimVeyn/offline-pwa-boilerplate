@@ -1,3 +1,4 @@
+import { ROLES, type Role } from '@notes-pwa/shared'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
@@ -15,6 +16,7 @@ function SignupPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState<Role>('viewer')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -23,7 +25,12 @@ function SignupPage() {
     setError('')
     setLoading(true)
 
-    const { error } = await authClient.signUp.email({ name, email, password })
+    const { error } = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      ...({ role } as Record<string, string>),
+    })
 
     if (error) {
       setError(error.message ?? 'Signup failed')
@@ -64,6 +71,17 @@ function SignupPage() {
               required
               minLength={8}
             />
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value as Role)}
+              className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm focus-visible:ring-1 focus-visible:outline-none"
+            >
+              {ROLES.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button type="submit" disabled={loading}>
               {loading ? 'Creating account...' : 'Sign up'}

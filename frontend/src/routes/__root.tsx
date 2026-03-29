@@ -3,6 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { Toaster } from 'sonner'
 
 import { OfflineIndicator } from '../components/offline-indicator'
 import { queryClient } from '../lib/query-client'
@@ -17,6 +18,7 @@ function RootComponent() {
       <div className="mx-auto min-h-screen max-w-2xl px-4 py-6">
         <Outlet />
       </div>
+      <Toaster richColors />
       <OfflineIndicator />
       <TanStackDevtools
         plugins={[

@@ -1,11 +1,19 @@
+import { PERMISSIONS, type Role } from '@notes-pwa/shared'
 import { Elysia } from 'elysia'
 
 import { env } from '@/env'
 import { ELECTRIC_HEADERS } from '@/index'
+import { authGuard } from '@/lib/auth-guard'
 
-export const electricRoutes = new Elysia({ prefix: '/electric' }).get(
-  '/:table',
-  async ({ params, request, set }) => {
+export const electricRoutes = new Elysia({ prefix: '/electric' })
+  .use(authGuard)
+  .get('/:table', async ({ params, request, set, user }) => {
+    const perms = PERMISSIONS[user.role as Role]
+    if (!perms.readableTables.includes(params.table)) {
+      set.status = 403
+      return JSON.stringify({ error: 'Forbidden' })
+    }
+
     const url = new URL(request.url)
     const targetUrl = `${env.ELECTRIC_URL}/v1/shape?table=${params.table}&${url.searchParams.toString()}`
 
@@ -27,5 +35,4 @@ export const electricRoutes = new Elysia({ prefix: '/electric' }).get(
     }
 
     return response.text()
-  }
-)
+  })
