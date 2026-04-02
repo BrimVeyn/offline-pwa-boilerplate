@@ -1,5 +1,9 @@
 import { syncMutationSchema, type SyncMutationKind } from '@notes-pwa/shared'
-import { IndexedDBAdapter, startOfflineExecutor } from '@tanstack/offline-transactions'
+import {
+  IndexedDBAdapter,
+  NonRetriableError,
+  startOfflineExecutor,
+} from '@tanstack/offline-transactions'
 
 import { notesCollection } from '../modules/notes/collection'
 import { writersCollection } from '../modules/writers/collection'
@@ -10,38 +14,38 @@ export const offlineExecutor = startOfflineExecutor({
   storage: new IndexedDBAdapter('notes-pwa-offline', 'transactions'),
   mutationFns: {
     sync: async ({ transaction, idempotencyKey }) => {
-      const pending = await offlineExecutor.peekOutbox()
-      const isStillPending = pending.some((tx) => tx.id === transaction.id)
-      if (!isStillPending) return
+      const mutations = transaction.mutations.flatMap((m) => {
+        const kind = `${m.collection.id}:${m.type}` as SyncMutationKind
+        const raw = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
 
-      const allMutations = pending.flatMap((tx) =>
-        tx.mutations.flatMap((m) => {
-          const kind = `${m.collection.id}:${m.type}` as SyncMutationKind
-          const raw = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
+        const serialized = Object.fromEntries(
+          Object.entries(raw).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : v])
+        )
 
-          // Serialize Date objects to ISO strings for schema validation
-          const serialized = Object.fromEntries(
-            Object.entries(raw).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : v])
-          )
+        const { data, error } = syncMutationSchema.safeParse({ kind, data: serialized })
+        if (error) {
+          // oxlint-disable-next-line no-console
+          console.warn(`Invalid mutation ${kind}:`, error.message)
+          return []
+        }
+        return [data]
+      })
 
-          const { data, error } = syncMutationSchema.safeParse({ kind, data: serialized })
-          if (error) {
-            // oxlint-disable-next-line no-console
-            console.warn(`Invalid mutation ${kind}:`, error.message)
-            return []
-          }
-          return [data]
-        })
-      )
+      if (mutations.length === 0) {
+        throw new NonRetriableError('All mutations in transaction failed validation')
+      }
 
-      await api.sync.post(
-        { mutations: allMutations },
+      const response = await api.sync.post(
+        { mutations },
         { headers: { 'idempotency-key': idempotencyKey } }
       )
 
-      const otherIds = pending.filter((tx) => tx.id !== transaction.id).map((tx) => tx.id)
-      for (const id of otherIds) {
-        await offlineExecutor.removeFromOutbox(id)
+      if (response.status === 403) {
+        throw new NonRetriableError(`Forbidden: ${JSON.stringify(response.data)}`)
+      }
+
+      if (response.error) {
+        throw new Error(`Sync failed: ${response.status}`)
       }
     },
   },
