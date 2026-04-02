@@ -6,6 +6,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Toaster } from 'sonner'
 
 import { OfflineIndicator } from '../components/offline-indicator'
+import { SyncOverlay } from '../components/sync-overlay'
 import { queryClient } from '../lib/query-client'
 
 export const Route = createRootRoute({
@@ -20,6 +21,7 @@ function RootComponent() {
       </div>
       <Toaster richColors />
       <OfflineIndicator />
+      <SyncOverlay />
       <TanStackDevtools
         plugins={[
           {

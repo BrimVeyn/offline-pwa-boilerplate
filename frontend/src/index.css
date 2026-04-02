@@ -128,3 +128,24 @@
     @apply font-sans;
   }
 }
+
+@keyframes dots {
+  0%,
+  20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%,
+  100% {
+    content: '...';
+  }
+}
+
+.animate-dots {
+  &::after {
+    content: '';
+    animation: dots 1.5s steps(1) infinite;
+  }
+}
