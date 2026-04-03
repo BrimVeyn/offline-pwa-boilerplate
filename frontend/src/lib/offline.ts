@@ -16,11 +16,29 @@ export const offlineExecutor = startOfflineExecutor({
     sync: async ({ transaction, idempotencyKey }) => {
       const mutations = transaction.mutations.flatMap((m) => {
         const kind = `${m.collection.id}:${m.type}` as SyncMutationKind
-        const raw = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
 
-        const serialized = Object.fromEntries(
-          Object.entries(raw).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : v])
-        )
+        let serialized: Record<string, unknown>
+        if (m.type === 'update') {
+          const original = m.original as Record<string, unknown>
+          const modified = m.modified as Record<string, unknown>
+          serialized = { id: modified.id }
+          for (const [k, v] of Object.entries(modified)) {
+            if (k === 'id') continue
+            const orig = original[k]
+            const changed =
+              v instanceof Date
+                ? !(orig instanceof Date) || v.getTime() !== orig.getTime()
+                : v !== orig
+            if (changed) {
+              serialized[k] = v instanceof Date ? v.toISOString() : v
+            }
+          }
+        } else {
+          const raw = (m.type === 'delete' ? m.original : m.modified) as Record<string, unknown>
+          serialized = Object.fromEntries(
+            Object.entries(raw).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : v])
+          )
+        }
 
         const { data, error } = syncMutationSchema.safeParse({ kind, data: serialized })
         if (error) {

@@ -50,6 +50,13 @@
       "when": 1774799499192,
       "tag": "0006_slow_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1775228868797,
+      "tag": "0007_bored_red_shift",
+      "breakpoints": true
     }
   ]
 }

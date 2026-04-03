@@ -16,6 +16,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        navigateFallback: '/index.html',
+      },
       manifest: {
         name: 'Offline Notes',
         short_name: 'Notes',

@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 export * from './auth-schema'
 
@@ -9,6 +9,7 @@ export const writers = pgTable('writers', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  fieldTimestamps: jsonb('field_timestamps').notNull().$type<Record<string, string>>().default({}),
 })
 
 export const notes = pgTable('notes', {
@@ -19,6 +20,7 @@ export const notes = pgTable('notes', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  fieldTimestamps: jsonb('field_timestamps').notNull().$type<Record<string, string>>().default({}),
 })
 
 export const auditLogs = pgTable('audit_logs', {
